@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "form-data": "^4.0.0",
     "fs": "0.0.1-security",
+    "got": "^12.5.3",
     "moment": "^2.29.1",
     "mongodb": "^3.6.3",
     "monk": "^7.3.3",

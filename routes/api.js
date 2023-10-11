@@ -48,6 +48,8 @@ loghandler = {
         status: 404,
         creator: `${creator}`,
         message: 'An internal error occurred. Please report via WhatsApp wa.me/628828642151'
+    },
+}
 		
 		// Downloader
 router.get('/fbdown', async (req, res) => {

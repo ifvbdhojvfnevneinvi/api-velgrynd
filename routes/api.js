@@ -6,7 +6,14 @@ let zahirr = db.get("zahirr");
 } catch (e) {
 	console.log('')  
 }
-let creator = "Velgrynd"
+const { ytMp4, ytMp3 } = require('../lib/y2mate')
+const { openai } = require("../lib/openai.js")
+const { toanime, tozombie } = require("../lib/turnimg.js")
+//const sanz = require("../lib/sanzyy-api")
+const sanzyy = require('sanzyy-api')
+const zexx = require("../lib/listdl")
+let mmk = ["Zexxa","Kira-Master","ZexxaDevID"]
+let creator = mmk[Math.floor(Math.random() * mmk.length)]
 let axios = require('axios')
 let fs = require('fs')
 let fetch = require('node-fetch');
@@ -40,15 +47,30 @@ loghandler = {
     error: {
         status: 404,
         creator: `${creator}`,
-        message: 'An internal error occurred. Please report via WhatsApp wa.me/6288286421519'
-    }
-}
+        message: 'An internal error occurred. Please report via WhatsApp wa.me/628828642151
+		
+		// Downloader
+router.get('/fbdown', async (req, res) => {
+	var url = req.query.url
+	if (!url ) return res.json({ status : false, creator : `${creator}`, message : "[!] masukan parameter url"})  
+zexx.fbdown(url).then(data => {
+	if (!data.Normal_video ) return res.json(loghandler.noturl)
+	res.json({
+	status: true,
+	creator: `${creator}`,
+	result:	data
+	})
+	})
+	 .catch(e => {
+		res.json(loghandler.error)
+})
+})
 
-     // Downloader
+		
     router.get('/tiktok', async(req, res) => {
 	      let url = req.query.url
 	      if (!url) return res.json(loghandler.noturl)
-	      let result = await tiktok(url)
+	      let result = await zexx.musically(url)
 	      try {
 		  res.json({
 			  status: 200,
@@ -61,17 +83,35 @@ loghandler = {
 		    res.json(loghandler.error)
 	     }
     })
+		router.get('/igstorydowloader', async (req, res) => {
+	var username = req.query.username
+	if (!username ) return res.json({ status : false, creator : `${creator}`, message : "[!] masukan parameter username"})   
+
+	fetch('https://api.zahwazein.xyz/downloader/instagram/story?apikey=zenzkey_8bc01f5847&username='+username)
+		.then(response => response.json())
+		.then(async (data) => {
+			var result = data.result
+		res.json({
+			status: 200,
+	        creator: `${creator}`,
+			result: result
+	    })
+	})
+})
     router.get('/igdl', async(req, res) => {
 	     let url = req.query.url
 	     if (!url) return res.json(loghandler.noturl)
-	     let result = await hxz.igdl(url)
 	     try {
-	     res.json({
-			  status: 200,
-			  creator: `${creator}`,
-              note: 'Jangan Di Tembak Bang',
-              result
-          })
+	     fetch('https://api.akuari.my.id/downloader/igdl2?link=' + url)
+		.then(response => response.json())
+		.then(async (data) => { 
+		var result = data.respon
+		res.json({
+			status: 200,
+	        creator: `${creator}`,
+			result: result
+	    })
+	})
 	    } catch(err) {
 		      console.log(err)
 		      res.json(loghandler.error)
@@ -80,7 +120,7 @@ loghandler = {
      router.get('/mediafire', async(req, res) => {
 	     let url = req.query.url
 	     if (!url) return res.json(loghandler.noturl)
-	     let result = await mediafireDl(url)
+	     let result = await zexx.mediafireDl(url)
 	     try {
 	     res.json({
 			  status: 200,
@@ -95,15 +135,32 @@ loghandler = {
       })
      router.get('/youtube', async(req, res) => {
 	     let url = req.query.url
-	     if (!url) return res.json(loghandler.noturl)
-	     let result = await hxz.youtube(url)
 	     try {
-	     res.json({
-			  status: 200,
-			  creator: `${creator}`,
-              note: 'Jangan Di Tembak Bang',
-              result
-          })
+	     var mp3 = await ytMp3(url)
+	var mp4 = await ytMp4(url)
+	if (!mp4 || !mp3) return res.json(loghandler.noturl)
+	limitapikey(req.query.apikey)
+		res.json({
+			status: 200,
+			creator: `${creator}`,
+			result:{ 
+			title: mp4.title,
+			desc: mp4.desc,
+			thum: mp4.thumb,
+			view: mp4.views,
+			channel: mp4.channel,
+			uploadDate: mp4.uploadDate,
+			mp4:{
+				result: mp4.result,
+				size: mp4.size,
+				quality: mp4.quality
+			},
+			mp3:{
+				result: mp3.result,
+				size: mp3.size
+			}
+		 }
+	   })
 	    } catch(err) {
 		      console.log(err)
 		      res.json(loghandler.error)
@@ -112,7 +169,7 @@ loghandler = {
      router.get('/twitter', async(req, res) => {
 	     let url = req.query.url
 	     if (!url) return res.json(loghandler.noturl)
-	     let result = await hxz.twitter(url)
+	     let result = await zexx.twitter(url)
 	     try {
 	     res.json({
 			  status: 200,
@@ -146,7 +203,7 @@ loghandler = {
       router.get('/pinterest', async(req, res) => {
 	      let query = req.query.query
 	      if (!query) return res.json(loghandler.notquery)
-	      let result = await pinterest(query)
+	      let result = await zexx.pinterest(query)
 	      res.json({ 
 		       status: 200,
 		       creator: `${creator}`,

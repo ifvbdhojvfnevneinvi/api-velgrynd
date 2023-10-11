@@ -3,7 +3,7 @@ cors = require('cors'),
 secure = require('ssl-express-www');
 let PORT = process.env.PORT || 8080 || 5000 || 3000
 let { color } = require('./lib/color.js')
-let host = 0.0.0.0
+let host = '0.0.0.0'
 
 let mainrouter = require('./routes/main'),
 apirouter = require('./routes/api')

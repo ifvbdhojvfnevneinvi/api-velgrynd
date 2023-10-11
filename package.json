@@ -48,7 +48,8 @@
     "cors": "^2.8.5",
     "minepm": "^1.0.2",
     "urlencode": "^1.1.0",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "ytdl-core": "^4.11.5"
   },
   "homepage": "https://github.com/ultimareall/api-velgrynd#readme"
 }
